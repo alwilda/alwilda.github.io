@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MySQL 字符集</title>
+    <url>/2022/11/05/about-mysql-character-sets/</url>
+    <content><![CDATA[<p>utf-8 编码可能 2 个字节、3 个字节、4 个字节的字符，但是 MySQL 的 utf8 编码只支持 3 字节的数据，而 utf8mb4 编码是 utf8 编码的超集，兼容 utf8，并且能存储 4 字节的表情字符。</p>
+<span id="more"></span>
+
+<h1 id="使用-uft8mb4"><a href="#使用-uft8mb4" class="headerlink" title="使用 uft8mb4"></a>使用 uft8mb4</h1><p>查看当前字符集：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">SHOW VARIABLES WHERE Variable_name LIKE <span class="token string">'character_set_%'</span> OR Variable_name LIKE <span class="token string">'collation%'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<div style="width: 32rem;">
+<img src="/2022/11/05/about-mysql-character-sets/mysql_default_charset.png" class="" title="MySQL 默认字符集">
+</div>
+
+<p>修改配置文件，一般名称为 <code>my.ini</code>，加入以下配置：</p>
+<pre class="line-numbers language-none"><code class="language-none">[client]
+default-character-set &#x3D; utf8mb4
+
+[mysql]
+default-character-set &#x3D; utf8mb4
+
+[mysqld]
+character-set-client-handshake &#x3D; FALSE
+character-set-server &#x3D; utf8mb4
+# ci 是 case insensitive, 即 &quot;大小写不敏感&quot;
+collation-server &#x3D; utf8mb4_general_ci
+init_connect&#x3D;&#39;SET NAMES utf8mb4&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>修改后重启 MySQL 服务，这时再查看发现默认字符集已经改变了。</p>
+<div style="width: 32rem;">
+<img src="/2022/11/05/about-mysql-character-sets/mysql_utf8mb4_charset.png" class="" title="MySQL 默认字符集">
+</div>
+
+<h1 id="建表语句"><a href="#建表语句" class="headerlink" title="建表语句"></a>建表语句</h1><pre class="line-numbers language-none"><code class="language-none">CREATE DATABASE IF NOT EXISTS test DEFAULT CHARSET utf8mb4 COLLATE utf8_general_ci;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+]]></content>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Apache Shiro 默认过滤器</title>
     <url>/2021/04/18/apache-shiro-default-filters/</url>
     <content><![CDATA[<p>自动可用的默认过滤器实例由 <a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/mgt/DefaultFilter.html"><code>DefaultFilter enum</code></a> 定义，并且枚举名称字段是可用于配置的名称。 它们是：</p>
@@ -76,58 +114,6 @@
     <url>/2021/02/21/a-new-beginning/</url>
     <content><![CDATA[<p>A New Beginning</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>MySQL 字符集</title>
-    <url>/2022/11/05/about-mysql-character-sets/</url>
-    <content><![CDATA[<p>utf-8 编码可能 2 个字节、3 个字节、4 个字节的字符，但是 MySQL 的 utf8 编码只支持 3 字节的数据，而 utf8mb4 编码是 utf8 编码的超集，兼容 utf8，并且能存储 4 字节的表情字符。</p>
-<span id="more"></span>
-
-<h1 id="使用-uft8mb4"><a href="#使用-uft8mb4" class="headerlink" title="使用 uft8mb4"></a>使用 uft8mb4</h1><p>查看当前字符集：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">SHOW VARIABLES WHERE Variable_name LIKE <span class="token string">'character_set_%'</span> OR Variable_name LIKE <span class="token string">'collation%'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<div style="width: 32rem;">
-<img src="/2022/11/05/about-mysql-character-sets/mysql_default_charset.png" class="" title="MySQL 默认字符集">
-</div>
-
-<p>修改配置文件，一般名称为 <code>my.ini</code>，加入以下配置：</p>
-<pre class="line-numbers language-none"><code class="language-none">[client]
-default-character-set &#x3D; utf8mb4
-
-[mysql]
-default-character-set &#x3D; utf8mb4
-
-[mysqld]
-character-set-client-handshake &#x3D; FALSE
-character-set-server &#x3D; utf8mb4
-# ci 是 case insensitive, 即 &quot;大小写不敏感&quot;
-collation-server &#x3D; utf8mb4_general_ci
-init_connect&#x3D;&#39;SET NAMES utf8mb4&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>修改后重启 MySQL 服务，这时再查看发现默认字符集已经改变了。</p>
-<div style="width: 32rem;">
-<img src="/2022/11/05/about-mysql-character-sets/mysql_utf8mb4_charset.png" class="" title="MySQL 默认字符集">
-</div>
-
-<h1 id="建表语句"><a href="#建表语句" class="headerlink" title="建表语句"></a>建表语句</h1><pre class="line-numbers language-none"><code class="language-none">CREATE DATABASE IF NOT EXISTS test DEFAULT CHARSET utf8mb4 COLLATE utf8_general_ci;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-]]></content>
-  </entry>
-  <entry>
-    <title>在 Windows 下使用命令行计算文件校验值</title>
-    <url>/2023/01/01/calculating-file-checksums-using-the-command-on-windows/</url>
-    <content><![CDATA[<p>在 Windows 中可以使用命令 <code>certutil</code> 来计算文件的校验值。</p>
-<span id="more"></span>
-
-<div style="width:65%;">
-<img src="/2023/01/01/calculating-file-checksums-using-the-command-on-windows/command.png" class="">
-</div>
-
-<p>通过 <code>certutil -hashfile -?</code> 可以知道它支持的哈希算法有: MD2 MD4 MD5 SHA1 SHA256 SHA384 SHA512</p>
-<p>那么要计算一个文件的 SHA256 值则可以使用：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">certutil <span class="token parameter variable">-hashfile</span> D:<span class="token punctuation">\</span>xxx<span class="token punctuation">\</span>xxx.txt SHA256<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>或者相对路径：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">certutil <span class="token parameter variable">-hashfile</span> xxx.txt SHA256<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
   </entry>
   <entry>
     <title>使用 refs 调用组件</title>
@@ -242,6 +228,29 @@ init_connect&#x3D;&#39;SET NAMES utf8mb4&#39;<span aria-hidden="true" class="lin
     </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
   <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      <tags>
+        <tag>React</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在 Windows 下使用命令行计算文件校验值</title>
+    <url>/2023/01/01/calculating-file-checksums-using-the-command-on-windows/</url>
+    <content><![CDATA[<p>在 Windows 中可以使用命令 <code>certutil</code> 来计算文件的校验值。</p>
+<span id="more"></span>
+
+<div style="width:65%;">
+<img src="/2023/01/01/calculating-file-checksums-using-the-command-on-windows/command.png" class="">
+</div>
+
+<p>通过 <code>certutil -hashfile -?</code> 可以知道它支持的哈希算法有: MD2 MD4 MD5 SHA1 SHA256 SHA384 SHA512</p>
+<p>那么要计算一个文件的 SHA256 值则可以使用：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">certutil <span class="token parameter variable">-hashfile</span> D:<span class="token punctuation">\</span>xxx<span class="token punctuation">\</span>xxx.txt SHA256<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>或者相对路径：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">certutil <span class="token parameter variable">-hashfile</span> xxx.txt SHA256<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+      <tags>
+        <tag>Windows</tag>
+      </tags>
   </entry>
   <entry>
     <title>Yarn 1.x 常用命令</title>
@@ -272,6 +281,9 @@ init_connect&#x3D;&#39;SET NAMES utf8mb4&#39;<span aria-hidden="true" class="lin
 
 <div class="note danger no-icon"><p>注意：与 npm 中的 –global 标志不同，global 是一个必须紧跟 yarn 的命令。输入 yarn add global package-name 将在本地添加名为 global 和 package-name 的软件包，而不是在全局添加 package-name。</p>
 </div>]]></content>
+      <tags>
+        <tag>Yarn</tag>
+      </tags>
   </entry>
   <entry>
     <title>常用 cmd 命令</title>
@@ -286,48 +298,9 @@ init_connect&#x3D;&#39;SET NAMES utf8mb4&#39;<span aria-hidden="true" class="lin
 </ul>
 <pre class="line-numbers language-none"><code class="language-none">tasklist|findstr 进程ID
 taskkill &#x2F;pid 进程ID-t -f<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>]]></content>
-  </entry>
-  <entry>
-    <title>Node.js 包管理器配置包缓存位置</title>
-    <url>/2023/02/05/configure-node-js-package-cache-location/</url>
-    <content><![CDATA[<h1 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h1><h2 id="查看配置"><a href="#查看配置" class="headerlink" title="查看配置"></a>查看配置</h2><ul>
-<li><code>npm config ls or npm config list</code> 所有配置。</li>
-<li><code>npm config list -l</code> 获取某配置。</li>
-<li><code>npm config get xxx</code></li>
-</ul>
-<span id="more"></span>
-
-<h2 id="配置全局安装和缓存路径"><a href="#配置全局安装和缓存路径" class="headerlink" title="配置全局安装和缓存路径"></a>配置全局安装和缓存路径</h2><ul>
-<li><code>npm config set prefix xxxpath</code></li>
-<li><code>npm config set cache xxxpath</code></li>
-</ul>
-<blockquote>
-<p>Windows 下要将全局路径添加到环境变量 PATH 中，方可使用依赖的独有命令。</p>
-</blockquote>
-<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><p>查看全局包：<code>npm list -g --depth 0</code></p>
-<p>卸载包：<code>npm uninstall</code></p>
-<h1 id="Yarn"><a href="#Yarn" class="headerlink" title="Yarn"></a>Yarn</h1><p>使用 <code>yarn config list</code> 查看所有已配置的信息。</p>
-<p>设置 <code>cache-folder</code> 来配置缓存目录。</p>
-<pre class="line-numbers language-none"><code class="language-none">yarn config set cache-folder &lt;path&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>或者 通过环境变量 <code>YARN_CACHE_FOLDER</code> 指定缓存目录。</p>
-<pre class="line-numbers language-none"><code class="language-none">YARN_CACHE_FOLDER&#x3D;&lt;path&gt; yarn &lt;command&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>运行 <code>yarn cache dir</code> 会打印出当前的 yarn 全局缓存在哪里。</p>
-<h2 id="改变-yarn-全局安装路径"><a href="#改变-yarn-全局安装路径" class="headerlink" title="改变 yarn 全局安装路径"></a>改变 yarn 全局安装路径</h2><p>设置安装位置</p>
-<pre class="line-numbers language-none"><code class="language-none">yarn config set global-folder &lt;path&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><code>yarn global bin</code> 将输出 <code>Yarn</code> 为您已安装的可执行文件之符号链接准备的位置。 您可以使用 <code>yarn config set prefix &lt;filepath&gt;</code> 配置此基本位置。</p>
-<p><code>yarn global dir</code> 将打印存放全局node_modules的全局安装文件夹。</p>
-<p>例如：以设置 <code>D:\Yarn\Global</code> 为全局安装目录为例，则：</p>
-<ul>
-<li><code>yarn config set global-folder D:\Yarn\Global</code></li>
-<li><code>yarn config set prefix  D:\Yarn\Global</code></li>
-</ul>
-<blockquote>
-<p>全局安装依赖时会将其命令脚本放到 D:\Yarn\Global\bin下，所以要将D:\Yarn\Global\bin 配置到环境变量 PATH 中。</p>
-</blockquote>
-]]></content>
+      <tags>
+        <tag>CMD</tag>
+      </tags>
   </entry>
   <entry>
     <title>Linux 下编译安装 Redis</title>
@@ -382,39 +355,9 @@ WantedBy&#x3D;multi-user.target<span aria-hidden="true" class="line-numbers-rows
 </li>
 </ol>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl <span class="token builtin class-name">enable</span> redis.service <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
-  </entry>
-  <entry>
-    <title>Git 删除提交记录</title>
-    <url>/2022/04/30/delete-git-commit-history/</url>
-    <content><![CDATA[<ol>
-<li>使用 git log 查找到要删除提交记录的上一条提交的 commit 的 id</li>
-</ol>
-<span id="more"></span>
-
-<ol start="2">
-<li><p>执行 git rebase -i commit-id</p>
-</li>
-<li><p>vim普通模式下，光标移到要删的那一行，执行 dd，删除所在行（按 i 进入编辑模式，把需要删除的记录的 pick 改为 drop，然后按 esc 退出 :wq 保存</p>
-</li>
-<li><p>再次查看git log，可以看到记录已经没有了</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>删除 Windows Defender 历史保护记录</title>
-    <url>/2021/10/10/delete-the-history-protection-records-of-windows-defender/</url>
-    <content><![CDATA[<p>删除 <strong>DetectionHistory</strong> 目录下的所有文件夹和文件： 👇</p>
-<span id="more"></span>
-
-<p>C:\ProgramData\Microsoft\Windows Defender\Scans\History\Service\DetectionHistory</p>
-<p><del>C:\ProgramData\Microsoft\Windows Defender\Scans\History\Results</del></p>
-]]></content>
       <tags>
-        <tag>Windows</tag>
+        <tag>Linux</tag>
+        <tag>Redis</tag>
       </tags>
   </entry>
   <entry>
@@ -434,78 +377,74 @@ WantedBy&#x3D;multi-user.target<span aria-hidden="true" class="line-numbers-rows
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h1 id="开发体验配置"><a href="#开发体验配置" class="headerlink" title="开发体验配置"></a>开发体验配置</h1><h2 id="提示忽略大小写"><a href="#提示忽略大小写" class="headerlink" title="提示忽略大小写"></a>提示忽略大小写</h2><pre class="line-numbers language-none"><code class="language-none">vscode:&#x2F;&#x2F;settings&#x2F;java.completion.matchCase<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
-  </entry>
-  <entry>
-    <title>Create React App 项目部署到二级目录</title>
-    <url>/2022/04/23/deploying-a-create-react-app-project-to-a-subdirectory/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>Fetch 无法获取响应头</title>
-    <url>/2021/09/23/fetch-unable-to-get-response-headers/</url>
-    <content><![CDATA[<p>请求响应后，打印 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Response/headers"><code>Response.headers</code></a> 却输出了空对象。</p>
-<span id="more"></span>
-
-<p>经过笔者数分钟的探索，发现产生这种情况，应该是请求处于<strong>跨域</strong>之中，于此则要在 <code>fetch()</code> 中配置 <code>mode</code> 属性：</p>
-<p>mode: 请求的模式，如 cors、 no-cors 或者 same-origin。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">fetch</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span><span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">mode</span><span class="token operator">:</span> <span class="token string">'cors'</span><span class="token punctuation">,</span>
-    <span class="token operator">...</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>至于 <code>Response.headers</code> 中的请求头信息不全，则要在服务端配置 <code>Access-Control-Expose-Headers</code>。</p>
-<blockquote><p>响应首部 <code>Access-Control-Expose-Headers</code> 列出了哪些首部可以作为响应的一部分暴露给外部。</p>
-<p>默认情况下，只有七种 simple response headers （简单响应首部）可以暴露给外部：</p>
-<ul>
-<li>Cache-Control</li>
-<li>Content-Language</li>
-<li>Content-Length</li>
-<li>Content-Type</li>
-<li>Expires</li>
-<li>Last-Modified</li>
-<li>Pragma</li>
-</ul>
-<p>如果想要让客户端可以访问到其他的首部信息，可以将它们在 <code>Access-Control-Expose-Headers</code> 里面列出来。</p>
-<footer><strong>@MDN</strong><cite><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Expose-Headers">Access-Control-Expose-Headers - HTTP | MDN</a></cite></footer></blockquote>
-
-]]></content>
       <tags>
-        <tag>JavaScript</tag>
+        <tag>Visual Studio Code</tag>
       </tags>
   </entry>
   <entry>
-    <title>修复 NVIDIA GPU 活动面板模糊的问题</title>
-    <url>/2022/01/14/fix-blurry-nvidia-gpu-control-panel/</url>
-    <content><![CDATA[<p>长久以来伴随着打开这玩意儿就显示模糊的问题的确是<del>让人荡气回肠，精彩纷呈，读来</del>令人茶饭不思，一病不起 😑。。。</p>
-<p>虽然也有一个相当凑合的方法——每次开机后再注销一次它就会显示清晰。但这也并不是长久之计，每次都注销也太烦了 😓。</p>
+    <title>Git 删除提交记录</title>
+    <url>/2022/04/30/delete-git-commit-history/</url>
+    <content><![CDATA[<ol>
+<li>使用 git log 查找到要删除提交记录的上一条提交的 commit 的 id</li>
+</ol>
 <span id="more"></span>
 
-<p>长久以来的寻找解决办法，终于 🤦‍</p>
-<p>首先：回顾一下这模糊的样子（也许以后会怀念的 🧐） 👇</p>
-<div style="width: 32rem;">
-<img src="/2022/01/14/fix-blurry-nvidia-gpu-control-panel/vague.png" class="" title="NVIDIA GPU 活动面板模糊的样子">
-</div>
+<ol start="2">
+<li><p>执行 git rebase -i commit-id</p>
+</li>
+<li><p>vim普通模式下，光标移到要删的那一行，执行 dd，删除所在行（按 i 进入编辑模式，把需要删除的记录的 pick 改为 drop，然后按 esc 退出 :wq 保存</p>
+</li>
+<li><p>再次查看git log，可以看到记录已经没有了</p>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Node.js 包管理器配置包缓存位置</title>
+    <url>/2023/02/05/configure-node-js-package-cache-location/</url>
+    <content><![CDATA[<h1 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h1><h2 id="查看配置"><a href="#查看配置" class="headerlink" title="查看配置"></a>查看配置</h2><ul>
+<li><code>npm config ls or npm config list</code> 所有配置。</li>
+<li><code>npm config list -l</code> 获取某配置。</li>
+<li><code>npm config get xxx</code></li>
+</ul>
+<span id="more"></span>
 
-<p>现在进入这个软件的设置，可以通过资源管理器打开，右键点击属性即可 👇</p>
-<div style="width: 32rem;">
-<img src="/2022/01/14/fix-blurry-nvidia-gpu-control-panel/step-1.png" class="" title="步骤-1">
-</div>
-
-<p>然后 👇，更改 <strong>所有用户</strong> 的 DPI 设置</p>
-<img src="/2022/01/14/fix-blurry-nvidia-gpu-control-panel/step-2.png" class="" title="步骤-2">
-
-<p>以后再开机：</p>
-<div style="width: 32rem;">
-<img src="/2022/01/14/fix-blurry-nvidia-gpu-control-panel/clear.png" class="">
-</div>
-
-<p>最后：</p>
+<h2 id="配置全局安装和缓存路径"><a href="#配置全局安装和缓存路径" class="headerlink" title="配置全局安装和缓存路径"></a>配置全局安装和缓存路径</h2><ul>
+<li><code>npm config set prefix xxxpath</code></li>
+<li><code>npm config set cache xxxpath</code></li>
+</ul>
 <blockquote>
-<p>猜想：这个方法应该也适用于其它软件模糊的情况。(⊙﹏⊙) 可能吧 ε&#x3D;ε&#x3D;ε&#x3D;┏(゜ロ゜;)┛ 😊</p>
+<p>Windows 下要将全局路径添加到环境变量 PATH 中，方可使用依赖的独有命令。</p>
+</blockquote>
+<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><p>查看全局包：<code>npm list -g --depth 0</code></p>
+<p>卸载包：<code>npm uninstall</code></p>
+<h1 id="Yarn"><a href="#Yarn" class="headerlink" title="Yarn"></a>Yarn</h1><p>使用 <code>yarn config list</code> 查看所有已配置的信息。</p>
+<p>设置 <code>cache-folder</code> 来配置缓存目录。</p>
+<pre class="line-numbers language-none"><code class="language-none">yarn config set cache-folder &lt;path&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>或者 通过环境变量 <code>YARN_CACHE_FOLDER</code> 指定缓存目录。</p>
+<pre class="line-numbers language-none"><code class="language-none">YARN_CACHE_FOLDER&#x3D;&lt;path&gt; yarn &lt;command&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>运行 <code>yarn cache dir</code> 会打印出当前的 yarn 全局缓存在哪里。</p>
+<h2 id="改变-yarn-全局安装路径"><a href="#改变-yarn-全局安装路径" class="headerlink" title="改变 yarn 全局安装路径"></a>改变 yarn 全局安装路径</h2><p>设置安装位置</p>
+<pre class="line-numbers language-none"><code class="language-none">yarn config set global-folder &lt;path&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>yarn global bin</code> 将输出 <code>Yarn</code> 为您已安装的可执行文件之符号链接准备的位置。 您可以使用 <code>yarn config set prefix &lt;filepath&gt;</code> 配置此基本位置。</p>
+<p><code>yarn global dir</code> 将打印存放全局node_modules的全局安装文件夹。</p>
+<p>例如：以设置 <code>D:\Yarn\Global</code> 为全局安装目录为例，则：</p>
+<ul>
+<li><code>yarn config set global-folder D:\Yarn\Global</code></li>
+<li><code>yarn config set prefix  D:\Yarn\Global</code></li>
+</ul>
+<blockquote>
+<p>全局安装依赖时会将其命令脚本放到 D:\Yarn\Global\bin下，所以要将D:\Yarn\Global\bin 配置到环境变量 PATH 中。</p>
 </blockquote>
 ]]></content>
       <tags>
-        <tag>Windows</tag>
+        <tag>NPM</tag>
       </tags>
   </entry>
   <entry>
@@ -513,16 +452,30 @@ WantedBy&#x3D;multi-user.target<span aria-hidden="true" class="line-numbers-rows
     <url>/2022/04/12/download-historical-versions-of-maven/</url>
     <content><![CDATA[<p><a href="https://archive.apache.org/dist/maven/maven-3/">https://archive.apache.org/dist/maven/maven-3/</a></p>
 <span id="more"></span>]]></content>
+      <tags>
+        <tag>Maven</tag>
+      </tags>
   </entry>
   <entry>
-    <title>解决 tomcat 控制台中文乱码</title>
-    <url>/2024/06/16/fix-tomcat-console-chinese-encoding-issue/</url>
-    <content><![CDATA[<p>编辑 <code>/conf/logging.properties</code>，将以下两个编码配置改为 <code>GBK</code>。</p>
-<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">1catalina.org.apache.juli.AsyncFileHandler.encoding</span> <span class="token punctuation">=</span> <span class="token value attr-value">GBK</span>
-<span class="token key attr-name">java.util.logging.ConsoleHandler.encoding</span> <span class="token punctuation">=</span> <span class="token value attr-value">GBK</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+    <title>删除 Windows Defender 历史保护记录</title>
+    <url>/2021/10/10/delete-the-history-protection-records-of-windows-defender/</url>
+    <content><![CDATA[<p>删除 <strong>DetectionHistory</strong> 目录下的所有文件夹和文件： 👇</p>
+<span id="more"></span>
 
-<p><small>同时适用于使用 IntelliJ IDEA 配置 Tomcat 启动项目后控制台乱码的情况。</small></p>
+<p>C:\ProgramData\Microsoft\Windows Defender\Scans\History\Service\DetectionHistory</p>
+<p><del>C:\ProgramData\Microsoft\Windows Defender\Scans\History\Results</del></p>
 ]]></content>
+      <tags>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Create React App 项目部署到二级目录</title>
+    <url>/2022/04/23/deploying-a-create-react-app-project-to-a-subdirectory/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>React</tag>
+      </tags>
   </entry>
   <entry>
     <title>使用 Vue 动态控制 Element-UI 的 DatePicker 选择范围</title>
@@ -603,6 +556,87 @@ WantedBy&#x3D;multi-user.target<span aria-hidden="true" class="line-numbers-rows
       </tags>
   </entry>
   <entry>
+    <title>Fetch 无法获取响应头</title>
+    <url>/2021/09/23/fetch-unable-to-get-response-headers/</url>
+    <content><![CDATA[<p>请求响应后，打印 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Response/headers"><code>Response.headers</code></a> 却输出了空对象。</p>
+<span id="more"></span>
+
+<p>经过笔者数分钟的探索，发现产生这种情况，应该是请求处于<strong>跨域</strong>之中，于此则要在 <code>fetch()</code> 中配置 <code>mode</code> 属性：</p>
+<p>mode: 请求的模式，如 cors、 no-cors 或者 same-origin。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">fetch</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span><span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">mode</span><span class="token operator">:</span> <span class="token string">'cors'</span><span class="token punctuation">,</span>
+    <span class="token operator">...</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>至于 <code>Response.headers</code> 中的请求头信息不全，则要在服务端配置 <code>Access-Control-Expose-Headers</code>。</p>
+<blockquote><p>响应首部 <code>Access-Control-Expose-Headers</code> 列出了哪些首部可以作为响应的一部分暴露给外部。</p>
+<p>默认情况下，只有七种 simple response headers （简单响应首部）可以暴露给外部：</p>
+<ul>
+<li>Cache-Control</li>
+<li>Content-Language</li>
+<li>Content-Length</li>
+<li>Content-Type</li>
+<li>Expires</li>
+<li>Last-Modified</li>
+<li>Pragma</li>
+</ul>
+<p>如果想要让客户端可以访问到其他的首部信息，可以将它们在 <code>Access-Control-Expose-Headers</code> 里面列出来。</p>
+<footer><strong>@MDN</strong><cite><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Expose-Headers">Access-Control-Expose-Headers - HTTP | MDN</a></cite></footer></blockquote>
+
+]]></content>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>修复 NVIDIA GPU 活动面板模糊的问题</title>
+    <url>/2022/01/14/fix-blurry-nvidia-gpu-control-panel/</url>
+    <content><![CDATA[<p>长久以来伴随着打开这玩意儿就显示模糊的问题的确是<del>让人荡气回肠，精彩纷呈，读来</del>令人茶饭不思，一病不起 😑。。。</p>
+<p>虽然也有一个相当凑合的方法——每次开机后再注销一次它就会显示清晰。但这也并不是长久之计，每次都注销也太烦了 😓。</p>
+<span id="more"></span>
+
+<p>长久以来的寻找解决办法，终于 🤦‍</p>
+<p>首先：回顾一下这模糊的样子（也许以后会怀念的 🧐） 👇</p>
+<div style="width: 32rem;">
+<img src="/2022/01/14/fix-blurry-nvidia-gpu-control-panel/vague.png" class="" title="NVIDIA GPU 活动面板模糊的样子">
+</div>
+
+<p>现在进入这个软件的设置，可以通过资源管理器打开，右键点击属性即可 👇</p>
+<div style="width: 32rem;">
+<img src="/2022/01/14/fix-blurry-nvidia-gpu-control-panel/step-1.png" class="" title="步骤-1">
+</div>
+
+<p>然后 👇，更改 <strong>所有用户</strong> 的 DPI 设置</p>
+<img src="/2022/01/14/fix-blurry-nvidia-gpu-control-panel/step-2.png" class="" title="步骤-2">
+
+<p>以后再开机：</p>
+<div style="width: 32rem;">
+<img src="/2022/01/14/fix-blurry-nvidia-gpu-control-panel/clear.png" class="">
+</div>
+
+<p>最后：</p>
+<blockquote>
+<p>猜想：这个方法应该也适用于其它软件模糊的情况。(⊙﹏⊙) 可能吧 ε&#x3D;ε&#x3D;ε&#x3D;┏(゜ロ゜;)┛ 😊</p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决 tomcat 控制台中文乱码</title>
+    <url>/2024/06/16/fix-tomcat-console-chinese-encoding-issue/</url>
+    <content><![CDATA[<p>编辑 <code>/conf/logging.properties</code>，将以下两个编码配置改为 <code>GBK</code>。</p>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">1catalina.org.apache.juli.AsyncFileHandler.encoding</span> <span class="token punctuation">=</span> <span class="token value attr-value">GBK</span>
+<span class="token key attr-name">java.util.logging.ConsoleHandler.encoding</span> <span class="token punctuation">=</span> <span class="token value attr-value">GBK</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><small>同时适用于使用 IntelliJ IDEA 配置 Tomcat 启动项目后控制台乱码的情况。</small></p>
+]]></content>
+      <tags>
+        <tag>Apache Tomcat</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>VSCode 在代码片段中没有提示</title>
     <url>/2021/05/31/fix-vscode-no-suggestions-in-code-snippets/</url>
     <content><![CDATA[<p>默认情况下，在代码片段中（处于光标聚焦状态）是没有提示的。比如:</p>
@@ -624,26 +658,6 @@ WantedBy&#x3D;multi-user.target<span aria-hidden="true" class="line-numbers-rows
 ]]></content>
       <tags>
         <tag>Visual Studio Code</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>获取本机win10的产品密钥</title>
-    <url>/2021/03/21/get-the-product-key-of-local-windows10/</url>
-    <content><![CDATA[<p>如何查看本机 <code>win10</code> 的产品密钥呢？👇</p>
-<span id="more"></span>
-
-<ol>
-<li><p>按 <code>win + q</code> 或 <code>win + r</code>，搜索 <code>regedit</code> 进入注册表。</p>
-</li>
-<li><p>地址栏输入并进入该条目</p>
-<pre class="line-numbers language-none"><code class="language-none">计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-<li><p>进入 <code>SoftwareProtectionPlatform</code> 的详情页面后，打开 <code>BackupProductKeyDefault</code>，里面的数值数据就是激活密钥。</p>
-</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -696,27 +710,10 @@ studentService<span class="token punctuation">.</span><span class="token functio
 
 <p>最后：在 <strong>MySQL</strong> 上测试，发现无需额外设置 <code>jdbcTypeForNull</code> 也可更新字段为 <code>null</code>，应该是……</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>Git 撤销上次的提交</title>
-    <url>/2022/04/30/git-undo-last-commit/</url>
-    <content><![CDATA[<p>这条命令就能撤回刚刚的提交。</p>
-<pre class="line-numbers language-none"><code class="language-none">git reset HEAD^<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>更多的参数：</p>
-<span id="more"></span>
-<pre class="line-numbers language-none"><code class="language-none">git reset [--soft | --mixed | --hard] [-q] [&lt;commit&gt;]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><code>--mixed</code><br>不删除工作空间改动代码，撤销 commit，并且撤销git add . 操作<br>这个为默认参数，<code>git reset --mixed HEAD^</code> 和 <code>git reset HEAD^</code> 效果是一样的。</p>
-<p><code>--soft</code><br>不删除工作空间改动代码，撤销 commit，不撤销 git add .</p>
-<p><code>--hard</code><br>删除工作空间改动代码，撤销 commit，撤销 git add .</p>
-<div class="note warning"><p>注意！完成这个操作后，会删除工作空间代码！恢复到上一次的 commit 状态，慎重使用！</p>
-</div>
-
-]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
+      <tags>
+        <tag>MyBatis</tag>
+        <tag>MyBatis-Plus</tag>
+      </tags>
   </entry>
   <entry>
     <title>Getting Started with JavaFX 11+</title>
@@ -803,9 +800,99 @@ studentService<span class="token punctuation">.</span><span class="token functio
 
 <h1 id="Scene-Builder-的使用"><a href="#Scene-Builder-的使用" class="headerlink" title="Scene Builder 的使用"></a>Scene Builder 的使用</h1><p><code>View</code> -&gt; <code>Show Sample Controller Skeleton</code></p>
 ]]></content>
-      <categories>
-        <category>JavaFX</category>
-      </categories>
+      <tags>
+        <tag>JavaFX</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git 撤销上次的提交</title>
+    <url>/2022/04/30/git-undo-last-commit/</url>
+    <content><![CDATA[<p>这条命令就能撤回刚刚的提交。</p>
+<pre class="line-numbers language-none"><code class="language-none">git reset HEAD^<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>更多的参数：</p>
+<span id="more"></span>
+<pre class="line-numbers language-none"><code class="language-none">git reset [--soft | --mixed | --hard] [-q] [&lt;commit&gt;]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>--mixed</code><br>不删除工作空间改动代码，撤销 commit，并且撤销git add . 操作<br>这个为默认参数，<code>git reset --mixed HEAD^</code> 和 <code>git reset HEAD^</code> 效果是一样的。</p>
+<p><code>--soft</code><br>不删除工作空间改动代码，撤销 commit，不撤销 git add .</p>
+<p><code>--hard</code><br>删除工作空间改动代码，撤销 commit，撤销 git add .</p>
+<div class="note warning"><p>注意！完成这个操作后，会删除工作空间代码！恢复到上一次的 commit 状态，慎重使用！</p>
+</div>
+
+]]></content>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>获取本机win10的产品密钥</title>
+    <url>/2021/03/21/get-the-product-key-of-local-windows10/</url>
+    <content><![CDATA[<p>如何查看本机 <code>win10</code> 的产品密钥呢？👇</p>
+<span id="more"></span>
+
+<ol>
+<li><p>按 <code>win + q</code> 或 <code>win + r</code>，搜索 <code>regedit</code> 进入注册表。</p>
+</li>
+<li><p>地址栏输入并进入该条目</p>
+<pre class="line-numbers language-none"><code class="language-none">计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>进入 <code>SoftwareProtectionPlatform</code> 的详情页面后，打开 <code>BackupProductKeyDefault</code>，里面的数值数据就是激活密钥。</p>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在 React 中初始化 ECharts</title>
+    <url>/2021/08/31/initializing-echarts-in-react/</url>
+    <content><![CDATA[<p>习惯了传统的 DOM 操作，在页面上使用 <a href="https://echarts.apache.org/zh/index.html">ECharts</a> 似乎感觉更方便，好比：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> myChart <span class="token operator">=</span> echarts<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'main'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>但是在使用了 React 这种 <strong>声明式</strong>&#x2F;<strong>组件化</strong> 的 JavaScript 库之后，对于 DOM 的操作大大减少了，那么在 React 中该如何初始化一个 ECharts 对象呢？</p>
+<span id="more"></span>
+
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> useEffect<span class="token punctuation">,</span> useRef <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> echarts <span class="token keyword">from</span> <span class="token string">"echarts"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">let</span> option <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token operator">...</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">Chart</span><span class="token punctuation">(</span>props<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">let</span> myChart <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useRef</span><span class="token generic class-name"><span class="token operator">&lt;</span>echarts<span class="token punctuation">.</span>EChartsType <span class="token operator">|</span> <span class="token keyword">null</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">renderChart</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>myChart<span class="token punctuation">.</span>current <span class="token operator">===</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    myChart<span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">setOption</span><span class="token punctuation">(</span>option<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">renderChart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span>
+      <span class="token attr-name">ref</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>e <span class="token operator">!==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+          myChart<span class="token punctuation">.</span>current <span class="token operator">=</span> echarts<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">className</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>props<span class="token punctuation">.</span>className<span class="token punctuation">&#125;</span></span>
+    <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>😶 上面是更好的方式吗 ❓</p>
+]]></content>
+      <tags>
+        <tag>React</tag>
+        <tag>ECharts</tag>
+      </tags>
   </entry>
   <entry>
     <title>Hexo 文章重命名后的路径访问问题</title>
@@ -893,52 +980,81 @@ studentService<span class="token punctuation">.</span><span class="token functio
       </tags>
   </entry>
   <entry>
-    <title>在 React 中初始化 ECharts</title>
-    <url>/2021/08/31/initializing-echarts-in-react/</url>
-    <content><![CDATA[<p>习惯了传统的 DOM 操作，在页面上使用 <a href="https://echarts.apache.org/zh/index.html">ECharts</a> 似乎感觉更方便，好比：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> myChart <span class="token operator">=</span> echarts<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'main'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>但是在使用了 React 这种 <strong>声明式</strong>&#x2F;<strong>组件化</strong> 的 JavaScript 库之后，对于 DOM 的操作大大减少了，那么在 React 中该如何初始化一个 ECharts 对象呢？</p>
+    <title>JavaFX Runtime images (Java 11+)</title>
+    <url>/2021/03/09/javafx-runtime-images/</url>
+    <content><![CDATA[<p>JavaFX 项目的 <code>Runtime images</code> 是一个自定义 JRE，它仅包含应用程序所需的平台模块。</p>
+<p>本文仅针对通过 <code>Maven</code> 构建的项目.</p>
 <span id="more"></span>
 
-<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> useEffect<span class="token punctuation">,</span> useRef <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> echarts <span class="token keyword">from</span> <span class="token string">"echarts"</span><span class="token punctuation">;</span>
+<h1 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h1><p>构建的成功与否几乎都取决于 <code>pom.xml</code> 中关于插件的配置，下面会针对这部分进行阐述。</p>
+<p><code>javafx-maven-plugin</code>有两个主要的命令 —— <code>javafx:run</code> 和 <code>javafx:jlink</code></p>
+<ul>
+<li><code>javafx:run</code> 进行编译和运行</li>
+<li><code>javafx:jlink</code> 创建自定义运行时</li>
+</ul>
+<h1 id="javafx-run-options"><a href="#javafx-run-options" class="headerlink" title="javafx:run options"></a>javafx:run options</h1><p>可能是原始的情况：</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.maven.plugins<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>maven-compiler-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>3.8.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>release</span><span class="token punctuation">></span></span>11 or 12 13 14 15 ......<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>release</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.openjfx<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javafx-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>0.0.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mainClass</span><span class="token punctuation">></span></span>xxx.xxx.App<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mainClass</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<span class="token keyword">let</span> option <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-    <span class="token operator">...</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<p>参考 <a href="https://github.com/openjfx/javafx-maven-plugin#javafxjlink-options">GitHub - openjfx&#x2F;javafx-maven-plugin: Maven plugin to run JavaFX 11+ applications</a> 来进行配置</p>
+<p>例如：</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>stripDebug</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>stripDebug</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>compress</span><span class="token punctuation">></span></span>2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>compress</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>noHeaderFiles</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>noHeaderFiles</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>noManPages</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>noManPages</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>launcher</span><span class="token punctuation">></span></span>launcher<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>launcher</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>jlinkImageName</span><span class="token punctuation">></span></span>app<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>jlinkImageName</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>jlinkZipName</span><span class="token punctuation">></span></span>app<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>jlinkZipName</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mainClass</span><span class="token punctuation">></span></span>xxx.xxx.App<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mainClass</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<span class="token keyword">function</span> <span class="token function">Chart</span><span class="token punctuation">(</span>props<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">let</span> myChart <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useRef</span><span class="token generic class-name"><span class="token operator">&lt;</span>echarts<span class="token punctuation">.</span>EChartsType <span class="token operator">|</span> <span class="token keyword">null</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-  <span class="token keyword">const</span> <span class="token function-variable function">renderChart</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>myChart<span class="token punctuation">.</span>current <span class="token operator">===</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    myChart<span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">setOption</span><span class="token punctuation">(</span>option<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-
-  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    <span class="token function">renderChart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-  <span class="token keyword">return</span> <span class="token punctuation">(</span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span>
-      <span class="token attr-name">ref</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>e <span class="token operator">!==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-          myChart<span class="token punctuation">.</span>current <span class="token operator">=</span> echarts<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span></span>
-      <span class="token attr-name">className</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>props<span class="token punctuation">.</span>className<span class="token punctuation">&#125;</span></span>
-    <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-  <span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>😶 上面是更好的方式吗 ❓</p>
+<h1 id="运行-javafx-run-的失败情况和解决办法"><a href="#运行-javafx-run-的失败情况和解决办法" class="headerlink" title="运行 javafx:run 的失败情况和解决办法"></a>运行 <code>javafx:run</code> 的失败情况和解决办法</h1><ul>
+<li><p><code>Failed to execute goal org.openjfx:javafx-maven-plugin:0.0.3:run (default-cli) on project hellofx: Error</code></p>
+<p><code>JAVA_HOME</code> 与项目需要的版本不一致，为了避免这种情况，可以将正确的版本添加到 <code>javafx-maven-plugin</code>:</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.openjfx<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javafx-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>0.0.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>executable</span><span class="token punctuation">></span></span>xxx\jdk-xxx\bin\java<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>executable</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
 ]]></content>
       <tags>
-        <tag>React</tag>
-        <tag>ECharts</tag>
+        <tag>JavaFX</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设置 Git 区分文件名/目录名大小写</title>
+    <url>/2021/04/03/making-git-case-sensitive/</url>
+    <content><![CDATA[<p>如何设置 <code>Git</code> 区分大小写呢？</p>
+<span id="more"></span>
+
+<p>进入 <code>Git</code> 仓库执行：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config core.ignorecase <span class="token boolean">false</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+]]></content>
+      <tags>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -1007,82 +1123,24 @@ studentService<span class="token punctuation">.</span><span class="token functio
       </tags>
   </entry>
   <entry>
-    <title>JavaFX Runtime images (Java 11+)</title>
-    <url>/2021/03/09/javafx-runtime-images/</url>
-    <content><![CDATA[<p>JavaFX 项目的 <code>Runtime images</code> 是一个自定义 JRE，它仅包含应用程序所需的平台模块。</p>
-<p>本文仅针对通过 <code>Maven</code> 构建的项目.</p>
+    <title>让 VSCode 准确识别 maven 项目的 Java 版本</title>
+    <url>/2021/07/18/making-vscode-accurately-identify-the-java-version-of-maven-projects/</url>
+    <content><![CDATA[<p>有时 VSCode 并不能正确识别 maven 项目的 Java 版本 🤔，这时便需要对项目进行一些配置…</p>
 <span id="more"></span>
 
-<h1 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h1><p>构建的成功与否几乎都取决于 <code>pom.xml</code> 中关于插件的配置，下面会针对这部分进行阐述。</p>
-<p><code>javafx-maven-plugin</code>有两个主要的命令 —— <code>javafx:run</code> 和 <code>javafx:jlink</code></p>
-<ul>
-<li><code>javafx:run</code> 进行编译和运行</li>
-<li><code>javafx:jlink</code> 创建自定义运行时</li>
-</ul>
-<h1 id="javafx-run-options"><a href="#javafx-run-options" class="headerlink" title="javafx:run options"></a>javafx:run options</h1><p>可能是原始的情况：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.maven.plugins<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>maven-compiler-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>3.8.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>release</span><span class="token punctuation">></span></span>11 or 12 13 14 15 ......<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>release</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.openjfx<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javafx-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>0.0.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mainClass</span><span class="token punctuation">></span></span>xxx.xxx.App<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mainClass</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>参考 <a href="https://github.com/openjfx/javafx-maven-plugin#javafxjlink-options">GitHub - openjfx&#x2F;javafx-maven-plugin: Maven plugin to run JavaFX 11+ applications</a> 来进行配置</p>
-<p>例如：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>stripDebug</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>stripDebug</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>compress</span><span class="token punctuation">></span></span>2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>compress</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>noHeaderFiles</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>noHeaderFiles</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>noManPages</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>noManPages</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>launcher</span><span class="token punctuation">></span></span>launcher<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>launcher</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>jlinkImageName</span><span class="token punctuation">></span></span>app<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>jlinkImageName</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>jlinkZipName</span><span class="token punctuation">></span></span>app<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>jlinkZipName</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mainClass</span><span class="token punctuation">></span></span>xxx.xxx.App<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mainClass</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="运行-javafx-run-的失败情况和解决办法"><a href="#运行-javafx-run-的失败情况和解决办法" class="headerlink" title="运行 javafx:run 的失败情况和解决办法"></a>运行 <code>javafx:run</code> 的失败情况和解决办法</h1><ul>
-<li><p><code>Failed to execute goal org.openjfx:javafx-maven-plugin:0.0.3:run (default-cli) on project hellofx: Error</code></p>
-<p><code>JAVA_HOME</code> 与项目需要的版本不一致，为了避免这种情况，可以将正确的版本添加到 <code>javafx-maven-plugin</code>:</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.openjfx<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javafx-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>0.0.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>executable</span><span class="token punctuation">></span></span>xxx\jdk-xxx\bin\java<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>executable</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-</ul>
-]]></content>
-      <categories>
-        <category>JavaFX</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>设置 Git 区分文件名/目录名大小写</title>
-    <url>/2021/04/03/making-git-case-sensitive/</url>
-    <content><![CDATA[<p>如何设置 <code>Git</code> 区分大小写呢？</p>
-<span id="more"></span>
-
-<p>进入 <code>Git</code> 仓库执行：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config core.ignorecase <span class="token boolean">false</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
+<p>在 <code>pom.xml</code> 中通过 <a href="http://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-source-and-target.html"><code>maven-compiler-plugin</code></a> 插件配置 <code>Java</code> 版本后让 VSCode 使用正确版本的 <code>JDK</code>。</p>
+<pre class="line-numbers language-markup" data-language="markup"><div class="caption"><span>pom.xml</span></div><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.maven.plugins<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>maven-compiler-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>3.8.1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>source</span><span class="token punctuation">></span></span>11<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>source</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>target</span><span class="token punctuation">></span></span>11<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>target</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      <tags>
+        <tag>Visual Studio Code</tag>
+      </tags>
   </entry>
   <entry>
     <title>Git 修改提交信息</title>
@@ -1108,28 +1166,8 @@ studentService<span class="token punctuation">.</span><span class="token functio
 <hr>
 <p> <code>git rebase --abort</code></p>
 ]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>让 VS Code 准确识别 maven 项目的 Java 版本</title>
-    <url>/2021/07/18/making-vscode-accurately-identify-the-java-version-of-maven-projects/</url>
-    <content><![CDATA[<p>有时 VS Code 并不能正确识别 maven 项目的 Java 版本 🤔，这时便需要对项目进行一些配置…</p>
-<span id="more"></span>
-
-<p>在 <code>pom.xml</code> 中通过 <a href="http://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-source-and-target.html"><code>maven-compiler-plugin</code></a> 插件配置 <code>Java</code> 版本后让 VS Code 使用正确版本的 <code>JDK</code>。</p>
-<pre class="line-numbers language-markup" data-language="markup"><div class="caption"><span>pom.xml</span></div><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.maven.plugins<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>maven-compiler-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>3.8.1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>source</span><span class="token punctuation">></span></span>11<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>source</span><span class="token punctuation">></span></span>
-		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>target</span><span class="token punctuation">></span></span>11<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>target</span><span class="token punctuation">></span></span>
-	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       <tags>
-        <tag>Visual Studio Code</tag>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -1270,12 +1308,9 @@ set global validate_password.length&#x3D;5;<span aria-hidden="true" class="line-
 
 <p>此时，MySQL 安装完成。 👏</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>ORA-32794 无法删除系统生成的序列</title>
-    <url>/2022/12/17/ora-32794-unable-to-drop-system-generated-sequence/</url>
-    <content><![CDATA[<p>使用：</p>
-<pre class="line-numbers language-none"><code class="language-none">purge recyclebin;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
   </entry>
   <entry>
     <title>为 Git 设置代理</title>
@@ -1284,6 +1319,37 @@ set global validate_password.length&#x3D;5;<span aria-hidden="true" class="line-
 
 <p>例如：</p>
 <pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">git config <span class="token operator">-</span><span class="token operator">-</span>global http<span class="token operator">.</span>proxy http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token operator">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">9999</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MyBatis 的参数传递</title>
+    <url>/2021/03/22/parameter-passing-in-mybatis/</url>
+    <content><![CDATA[<p><a href="https://github.com/mybatis/mybatis-3/issues/549">Obtain formal parameter names using Java reflection · Issue #549 · mybatis&#x2F;mybatis-3</a></p>
+]]></content>
+      <tags>
+        <tag>MyBatis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>去除 WinRAR 的弹窗广告</title>
+    <url>/2022/03/13/removing-winrar-ads/</url>
+    <content><![CDATA[<p>首先需要下载 Resource_Hacker 这个软件</p>
+<p>链接：<a href="https://pan.baidu.com/s/1s40kB42VruDXCyrvmenwUA">https://pan.baidu.com/s/1s40kB42VruDXCyrvmenwUA</a><br>提取码：ls86</p>
+]]></content>
+      <tags>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ORA-32794 无法删除系统生成的序列</title>
+    <url>/2022/12/17/ora-32794-unable-to-drop-system-generated-sequence/</url>
+    <content><![CDATA[<p>使用：</p>
+<pre class="line-numbers language-none"><code class="language-none">purge recyclebin;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+      <tags>
+        <tag>Oracle</tag>
+      </tags>
   </entry>
   <entry>
     <title>使用 VisualVM 远程连接 JVM</title>
@@ -1374,41 +1440,9 @@ controlRole  R<span class="token operator">&amp;</span>D<span aria-hidden="true"
 </tbody></table>
 <p>通过以上配置便可以在 VisualVM 中使用 JMX 连接。</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>MyBatis 的参数传递</title>
-    <url>/2021/03/22/parameter-passing-in-mybatis/</url>
-    <content><![CDATA[<p><a href="https://github.com/mybatis/mybatis-3/issues/549">Obtain formal parameter names using Java reflection · Issue #549 · mybatis&#x2F;mybatis-3</a></p>
-]]></content>
       <tags>
-        <tag>MyBatis</tag>
+        <tag>Java</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Git 重命名远端分支</title>
-    <url>/2023/12/23/rename-git-remote-branch/</url>
-    <content><![CDATA[<p>要修改 Git 远程仓库中的分支名称，可以按以下步骤操作：</p>
-<span id="more"></span>
-
-<ol>
-<li>如果不在要重命名的分支上，那先切换到该分支</li>
-</ol>
-<pre class="line-numbers language-none"><code class="language-none">git checkout &lt;old-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ol start="2">
-<li>重命名本地分支，使用以下命令将本地分支重命名</li>
-</ol>
-<pre class="line-numbers language-none"><code class="language-none">git branch -m &lt;new-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ol start="3">
-<li>删除远程仓库中的旧分支（注意冒号）</li>
-</ol>
-<pre class="line-numbers language-none"><code class="language-none">git push origin :&lt;old-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ol start="4">
-<li>最后将重命名后的本地分支推送到远端</li>
-</ol>
-<pre class="line-numbers language-none"><code class="language-none">git push origin &lt;new-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
   </entry>
   <entry>
     <title>只在更新时运行 effect</title>
@@ -1459,11 +1493,45 @@ controlRole  R<span class="token operator">&amp;</span>D<span aria-hidden="true"
       </tags>
   </entry>
   <entry>
-    <title>去除 WinRAR 的弹窗广告</title>
-    <url>/2022/03/13/removing-winrar-ads/</url>
-    <content><![CDATA[<p>首先需要下载 Resource_Hacker 这个软件</p>
-<p>链接：<a href="https://pan.baidu.com/s/1s40kB42VruDXCyrvmenwUA">https://pan.baidu.com/s/1s40kB42VruDXCyrvmenwUA</a><br>提取码：ls86</p>
+    <title>Git 重命名远端分支</title>
+    <url>/2023/12/23/rename-git-remote-branch/</url>
+    <content><![CDATA[<p>要修改 Git 远程仓库中的分支名称，可以按以下步骤操作：</p>
+<span id="more"></span>
+
+<ol>
+<li>如果不在要重命名的分支上，那先切换到该分支</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">git checkout &lt;old-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="2">
+<li>重命名本地分支，使用以下命令将本地分支重命名</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">git branch -m &lt;new-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="3">
+<li>删除远程仓库中的旧分支（注意冒号）</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">git push origin :&lt;old-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="4">
+<li>最后将重命名后的本地分支推送到远端</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">git push origin &lt;new-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>指定 create-react-app 启动时打开的浏览器</title>
+    <url>/2021/04/02/set-the-browser-to-open-when-create-react-app-starts/</url>
+    <content><![CDATA[<p>默认打开自默认浏览器</p>
+<span id="more"></span>
+
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"start"</span><span class="token operator">:</span> <span class="token string">"set BROWSER=firefox&amp;&amp; react-scripts start"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 ]]></content>
+      <tags>
+        <tag>React</tag>
+      </tags>
   </entry>
   <entry>
     <title>Shiro 自定义 Realm 却只能捕获 AuthenticationException</title>
@@ -1473,11 +1541,37 @@ controlRole  R<span class="token operator">&amp;</span>D<span aria-hidden="true"
 
 <p>现在笔者只遇到了一种，那就是——项目存在一个以上的 <code>Realm</code>，例如除了自定义 <code>Realm</code> 外， <code>resources</code> 目录下有个 <code>shiro.ini</code> 文件，Shiro 读取到到后自动产生了 <code>IniRealm</code>。</p>
 ]]></content>
+      <tags>
+        <tag>Apache Shiro</tag>
+      </tags>
   </entry>
   <entry>
-    <title>JavaScript 中的节流与防抖</title>
-    <url>/2021/12/27/throttling-and-debouncing-in-javascript/</url>
-    <content><![CDATA[]]></content>
+    <title>切换 Windows 11 右键菜单风格</title>
+    <url>/2021/11/07/switch-windows-11-context-menu-style/</url>
+    <content><![CDATA[<p>更新到 Windows 11 之后，整体界面焕然一新，虽然推送的是正式版，实则有些东西完全就是半成品，比如右键菜单的功能就过于简陋，所以必须切换回原来的样子。</p>
+<span id="more"></span>
+
+<ol>
+<li><p>以管理员身份打开 Windows 终端。</p>
+</li>
+<li><p>输入以下 <strong>换回经典</strong> 或 <em>恢复回 Win11</em> 的命令，回车运行。</p>
+<ul>
+<li><p>换回原来的样子</p>
+  <pre class="line-numbers language-none"><code class="language-none">reg add &quot;HKCU\Software\Classes\CLSID\&#123;86ca1aa0-34aa-4e8b-a509-50c905bae2a2&#125;\InprocServer32&quot; &#x2F;f &#x2F;ve<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>回到如今的风格</p>
+  <pre class="line-numbers language-none"><code class="language-none">reg delete &quot;HKCU\Software\Classes\CLSID\&#123;86ca1aa0-34aa-4e8b-a509-50c905bae2a2&#125;&quot; &#x2F;f<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ul>
+</li>
+<li><p>打开 Windows 资源管理器，然后打开 <a href="https://baike.baidu.com/item/windows%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8/7857349#1_1">任务管理器</a> ，右键选择 Windows 资源管理器，点击 <strong>重新启动</strong>。</p>
+</li>
+<li><p>搞定。</p>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Windows</tag>
+      </tags>
   </entry>
   <entry>
     <title>SQL 备忘录</title>
@@ -1571,45 +1665,17 @@ controlRole  R<span class="token operator">&amp;</span>D<span aria-hidden="true"
             <span class="token keyword">END</span> <span class="token keyword">LOOP</span><span class="token punctuation">;</span>
     <span class="token keyword">END</span><span class="token punctuation">;</span>
 <span class="token keyword">END</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
-  </entry>
-  <entry>
-    <title>切换 Windows 11 右键菜单风格</title>
-    <url>/2021/11/07/switch-windows-11-context-menu-style/</url>
-    <content><![CDATA[<p>更新到 Windows 11 之后，整体界面焕然一新，虽然推送的是正式版，实则有些东西完全就是半成品，比如右键菜单的功能就过于简陋，所以必须切换回原来的样子。</p>
-<span id="more"></span>
-
-<ol>
-<li><p>以管理员身份打开 Windows 终端。</p>
-</li>
-<li><p>输入以下 <strong>换回经典</strong> 或 <em>恢复回 Win11</em> 的命令，回车运行。</p>
-<ul>
-<li><p>换回原来的样子</p>
-  <pre class="line-numbers language-none"><code class="language-none">reg add &quot;HKCU\Software\Classes\CLSID\&#123;86ca1aa0-34aa-4e8b-a509-50c905bae2a2&#125;\InprocServer32&quot; &#x2F;f &#x2F;ve<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-<li><p>回到如今的风格</p>
-  <pre class="line-numbers language-none"><code class="language-none">reg delete &quot;HKCU\Software\Classes\CLSID\&#123;86ca1aa0-34aa-4e8b-a509-50c905bae2a2&#125;&quot; &#x2F;f<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
-</ul>
-</li>
-<li><p>打开 Windows 资源管理器，然后打开 <a href="https://baike.baidu.com/item/windows%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8/7857349#1_1">任务管理器</a> ，右键选择 Windows 资源管理器，点击 <strong>重新启动</strong>。</p>
-</li>
-<li><p>搞定。</p>
-</li>
-</ol>
-]]></content>
       <tags>
-        <tag>Windows</tag>
+        <tag>Oracle</tag>
+        <tag>SQL</tag>
       </tags>
   </entry>
   <entry>
-    <title>指定 create-react-app 启动时打开的浏览器</title>
-    <url>/2021/04/02/set-the-browser-to-open-when-create-react-app-starts/</url>
-    <content><![CDATA[<p>默认打开自默认浏览器</p>
-<span id="more"></span>
-
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"start"</span><span class="token operator">:</span> <span class="token string">"set BROWSER=firefox&amp;&amp; react-scripts start"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-]]></content>
+    <title>JavaScript 中的节流与防抖</title>
+    <url>/2021/12/27/throttling-and-debouncing-in-javascript/</url>
+    <content><![CDATA[]]></content>
       <tags>
-        <tag>React</tag>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -1671,6 +1737,30 @@ xhr<span class="token punctuation">.</span><span class="token function">send</sp
 <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       <tags>
         <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java JSON library - Jackson 的使用</title>
+    <url>/2021/03/16/using-jackson-java-json-library/</url>
+    <content><![CDATA[<p>从实际使用的角度列出对 <code>Jackson</code> 的一些操作。</p>
+<span id="more"></span>
+
+<p>What is Jackson?</p>
+<blockquote><p>Jackson has been known as “the Java JSON library” or “the best JSON parser for Java”. Or simply as “JSON for Java”.</p>
+<footer><strong>@FasterXML</strong><cite><a href="https://github.com/FasterXML/jackson#what-is-jackson">GitHub - FasterXML/jackson</a></cite></footer></blockquote>
+
+<h1 id="只在序列化或反序列化时忽略"><a href="#只在序列化或反序列化时忽略" class="headerlink" title="只在序列化或反序列化时忽略"></a>只在序列化或反序列化时忽略</h1><p>使用注解 <code>@JsonProperty</code> 的 <code>access</code> 属性。</p>
+<h1 id="定义反序列化时的别名"><a href="#定义反序列化时的别名" class="headerlink" title="定义反序列化时的别名"></a>定义反序列化时的别名</h1><p>使用注解 <code>@JsonAlias</code>。</p>
+<p>注：可定义属性的一个或<strong>多个</strong>替代名称，在反序列化期间可以接受为<strong>正式名称的替代</strong>。 别名信息在 <code>POJO</code> 内省期间也会公开，但在始终使用主名的序列化过程中无效。</p>
+<p>代码示例：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Info</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@JsonAlias</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token string">"n"</span><span class="token punctuation">,</span> <span class="token string">"Name"</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+        <tag>Jackson</tag>
       </tags>
   </entry>
   <entry>
@@ -1796,26 +1886,75 @@ response<span class="token punctuation">.</span><span class="token function">get
       </tags>
   </entry>
   <entry>
-    <title>Java JSON library - Jackson 的使用</title>
-    <url>/2021/03/16/using-jackson-java-json-library/</url>
-    <content><![CDATA[<p>从实际使用的角度列出对 <code>Jackson</code> 的一些操作。</p>
+    <title>VSCode 终端进程启动失败</title>
+    <url>/2021/09/11/vs-code-terminal-process-start-failed/</url>
+    <content><![CDATA[<p>关于 VSCode 打开终端报错——终端进程启动失败： A native exception occurred during launch (Unable to start terminal process: CreateProcess failed) 的解决方案。</p>
 <span id="more"></span>
 
-<p>What is Jackson?</p>
-<blockquote><p>Jackson has been known as “the Java JSON library” or “the best JSON parser for Java”. Or simply as “JSON for Java”.</p>
-<footer><strong>@FasterXML</strong><cite><a href="https://github.com/FasterXML/jackson#what-is-jackson">GitHub - FasterXML/jackson</a></cite></footer></blockquote>
+<p>在配置项 <code>terminal.integrated.shell.windows</code> 提示已被弃用且配置了也好像无济于事的情况下，我们应该就要按其提示的使用新的配置方式。</p>
+<p>– 图</p>
+<p>当输入 <code>terminal.integrated.profiles.windows</code>，VSCode 会给出提示并在确定后自动给出默认配置，类似如下的样子：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"terminal.integrated.profiles.windows"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token property">"PowerShell"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"source"</span><span class="token operator">:</span> <span class="token string">"PowerShell"</span><span class="token punctuation">,</span>
+    <span class="token property">"icon"</span><span class="token operator">:</span> <span class="token string">"terminal-powershell"</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"Command Prompt"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"path"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"$&#123;env:windir&#125;\\Sysnative\\cmd.exe"</span><span class="token punctuation">,</span>
+      <span class="token string">"$&#123;env:windir&#125;\\System32\\cmd.exe"</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"args"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"icon"</span><span class="token operator">:</span> <span class="token string">"terminal-cmd"</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"Git Bash"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"source"</span><span class="token operator">:</span> <span class="token string">"Git Bash"</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="只在序列化或反序列化时忽略"><a href="#只在序列化或反序列化时忽略" class="headerlink" title="只在序列化或反序列化时忽略"></a>只在序列化或反序列化时忽略</h1><p>使用注解 <code>@JsonProperty</code> 的 <code>access</code> 属性。</p>
-<h1 id="定义反序列化时的别名"><a href="#定义反序列化时的别名" class="headerlink" title="定义反序列化时的别名"></a>定义反序列化时的别名</h1><p>使用注解 <code>@JsonAlias</code>。</p>
-<p>注：可定义属性的一个或<strong>多个</strong>替代名称，在反序列化期间可以接受为<strong>正式名称的替代</strong>。 别名信息在 <code>POJO</code> 内省期间也会公开，但在始终使用主名的序列化过程中无效。</p>
-<p>代码示例：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Info</span> <span class="token punctuation">&#123;</span>
-    <span class="token annotation punctuation">@JsonAlias</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token string">"n"</span><span class="token punctuation">,</span> <span class="token string">"Name"</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-    <span class="token keyword">public</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是仅仅这样还是不够的，上面只相当于列出一个可用终端类型的列表，你还需要一个配置去指定默认要使用的终端类型，如下：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"terminal.integrated.defaultProfile.windows"</span><span class="token operator">:</span> <span class="token string">"Git Bash"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p> 如此配好之后，便可以正常打开终端了。</p>
+<p>另一个问题❓</p>
+<p>现在打开终端是没问题了，但是我们通过 VSCode 去运行 npm 脚本时，却还提示</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span> Executing task: <span class="token function">yarn</span> run start <span class="token operator">&lt;</span>
+
+终端进程启动失败: A native exception occurred during launch <span class="token punctuation">(</span>Unable to start terminal process: CreateProcess failed<span class="token punctuation">)</span>。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>好吧，还需要一个配置（怎么这么多配置？），就是：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token comment">// 一个路径，设置后将替代 terminal.integrated.shell.windows，并忽略与自动化相关的终端使用情况(例如任务和调试)的 shellArgs 值。</span>
+<span class="token property">"terminal.integrated.automationShell.windows"</span><span class="token operator">:</span> <span class="token string">"C:\\WINDOWS\\System32\\cmd.exe"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>在这个配置中，我试图使用 Git Bash 的路径，但并不能用。</p>
 ]]></content>
       <tags>
+        <tag>Visual Studio Code</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VSCode 导入 Java 项目却一直 Starting Java Language Server...</title>
+    <url>/2021/08/01/vs-code-import-java-project-stuck-at-starting-java-language-server/</url>
+    <content><![CDATA[<p>关于 Java 环境一直处于加载中 👇</p>
+<span id="more"></span>
+
+<p>进入 %APPDATA%\Code\User 目录，删除 <strong>workspaceStorage</strong> 文件夹</p>
+<blockquote>
+<p><a href="https://github.com/redhat-developer/vscode-java/issues/158">Starting Java Language Server never ends · Issue #158 · redhat-developer&#x2F;vscode-java</a></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Visual Studio Code</tag>
         <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>为什么不能修改 Twitter 的显示名称</title>
+    <url>/2024/04/06/why-can-t-you-modify-the-display-name-on-twitter/</url>
+    <content><![CDATA[<blockquote><p><strong>Note:</strong> When you are initially going through your profile set-up, you will not see the option to change your display name, until you have a profile and header photo uploaded. </p>
+<footer><strong>@Twitter</strong><cite><a href="https://help.twitter.com/en/managing-your-account/how-to-customize-your-profile">help.twitter.com/en/managing-your-account/how-to-customize-your-profile</a></cite></footer></blockquote>]]></content>
+      <tags>
+        <tag>Twitter</tag>
       </tags>
   </entry>
   <entry>
@@ -1905,75 +2044,6 @@ console<span class="token punctuation">.</span><span class="token function">log<
 ]]></content>
       <tags>
         <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>VS Code 导入 Java 项目却一直 Starting Java Language Server...</title>
-    <url>/2021/08/01/vs-code-import-java-project-stuck-at-starting-java-language-server/</url>
-    <content><![CDATA[<p>关于 Java 环境一直处于加载中 👇</p>
-<span id="more"></span>
-
-<p>进入 %APPDATA%\Code\User 目录，删除 <strong>workspaceStorage</strong> 文件夹</p>
-<blockquote>
-<p><a href="https://github.com/redhat-developer/vscode-java/issues/158">Starting Java Language Server never ends · Issue #158 · redhat-developer&#x2F;vscode-java</a></p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>Visual Studio Code</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>为什么不能修改 Twitter 的显示名称</title>
-    <url>/2024/04/06/why-can-t-you-modify-the-display-name-on-twitter/</url>
-    <content><![CDATA[<blockquote><p><strong>Note:</strong> When you are initially going through your profile set-up, you will not see the option to change your display name, until you have a profile and header photo uploaded. </p>
-<footer><strong>@Twitter</strong><cite><a href="https://help.twitter.com/en/managing-your-account/how-to-customize-your-profile">help.twitter.com/en/managing-your-account/how-to-customize-your-profile</a></cite></footer></blockquote>]]></content>
-  </entry>
-  <entry>
-    <title>VS Code 终端进程启动失败</title>
-    <url>/2021/09/11/vs-code-terminal-process-start-failed/</url>
-    <content><![CDATA[<p>关于 VS Code 打开终端报错——终端进程启动失败： A native exception occurred during launch (Unable to start terminal process: CreateProcess failed) 的解决方案。</p>
-<span id="more"></span>
-
-<p>在配置项 <code>terminal.integrated.shell.windows</code> 提示已被弃用且配置了也好像无济于事的情况下，我们应该就要按其提示的使用新的配置方式。</p>
-<p>– 图</p>
-<p>当输入 <code>terminal.integrated.profiles.windows</code>，VS Code 会给出提示并在确定后自动给出默认配置，类似如下的样子：</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"terminal.integrated.profiles.windows"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token property">"PowerShell"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"source"</span><span class="token operator">:</span> <span class="token string">"PowerShell"</span><span class="token punctuation">,</span>
-    <span class="token property">"icon"</span><span class="token operator">:</span> <span class="token string">"terminal-powershell"</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token property">"Command Prompt"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"path"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-      <span class="token string">"$&#123;env:windir&#125;\\Sysnative\\cmd.exe"</span><span class="token punctuation">,</span>
-      <span class="token string">"$&#123;env:windir&#125;\\System32\\cmd.exe"</span>
-    <span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token property">"args"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token property">"icon"</span><span class="token operator">:</span> <span class="token string">"terminal-cmd"</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token property">"Git Bash"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"source"</span><span class="token operator">:</span> <span class="token string">"Git Bash"</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>但是仅仅这样还是不够的，上面只相当于列出一个可用终端类型的列表，你还需要一个配置去指定默认要使用的终端类型，如下：</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"terminal.integrated.defaultProfile.windows"</span><span class="token operator">:</span> <span class="token string">"Git Bash"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p> 如此配好之后，便可以正常打开终端了。</p>
-<p>另一个问题❓</p>
-<p>现在打开终端是没问题了，但是我们通过 VS Code 去运行 npm 脚本时，却还提示</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span> Executing task: <span class="token function">yarn</span> run start <span class="token operator">&lt;</span>
-
-终端进程启动失败: A native exception occurred during launch <span class="token punctuation">(</span>Unable to start terminal process: CreateProcess failed<span class="token punctuation">)</span>。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>好吧，还需要一个配置（怎么这么多配置？），就是：</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token comment">// 一个路径，设置后将替代 terminal.integrated.shell.windows，并忽略与自动化相关的终端使用情况(例如任务和调试)的 shellArgs 值。</span>
-<span class="token property">"terminal.integrated.automationShell.windows"</span><span class="token operator">:</span> <span class="token string">"C:\\WINDOWS\\System32\\cmd.exe"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>在这个配置中，我试图使用 Git Bash 的路径，但并不能用。</p>
-]]></content>
-      <tags>
-        <tag>Visual Studio Code</tag>
       </tags>
   </entry>
 </search>
